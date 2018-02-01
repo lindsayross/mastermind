@@ -18,7 +18,7 @@ def code_breaker():
 #Return a boolean value
 def length_checking(length):
 	length_check = True
-	if length.isdigit() == True and int(length) <= 6:
+	if length.isdigit() == True and int(length) <= 4:
 		length_check = True
 	else:
 		length_check = False
@@ -60,11 +60,11 @@ def user_feedback_cheking(user_feedback):
 	
 #Codes for code maker go to this function
 def code_maker():
-	length = input("Please choose number of color from 1 - 6: ")
+	length = input("Please choose number of color from 1 - 4: ")
 	length_check = length_checking(length)
 	
 	while length_check == False:
-		length = input("Please choose number of color from 1 - 6: ")
+		length = input("Please choose number of color from 1 - 4: ")
 		length_check = length_checking(length)
 	
 	number_guess = input("Please choose number of guesses 1 - 12: ")
