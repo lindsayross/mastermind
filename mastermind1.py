@@ -1,19 +1,20 @@
 import re
-print("Welcome to Mastermind!")
 
-mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
-
-#Loop until user give the right input
-while mode != "1":
-	if mode == "2":
-		break
-	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
-
+def instruction():
+	print("blah blah blah")
+	go_back_button = str(input("Press 1 to go back to the menu\n"))
 	
+	while go_back_button != "1":
+		print("blah blah blah")
+		go_back_button = str(input("Press 1 to go back to the menu\n"))
+	if go_back_button == "1":
+		main()
+		
 #Codes for code breaker go to this function
 def code_breaker():
 	print("test code_break")
 	return;
+
 
 #Function that returns number of guesses for each game mode
 def game_mode_guess(game_mode):
@@ -84,9 +85,25 @@ def code_maker():
 		
 	print("test code_maker")
 	return;
+	
+def main():
+	print("Welcome to Mastermind!")
+	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\n" ))
 
-#Switch case for mode
-if mode == "1":
-	code_maker()
-elif mode == "2":
-	code_breaker()
+	#Loop until user give the right input
+	while mode != "1":
+		if mode == "2":
+			break
+		if mode == "3":
+			break
+		mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
+	
+	#Switch case for mode
+	if mode == "1":
+		code_maker()
+	elif mode == "2":
+		code_breaker()
+	elif mode == "3":
+		instruction()
+		
+main()
