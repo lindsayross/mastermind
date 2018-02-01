@@ -9,36 +9,38 @@ while mode != "1":
 		break
 	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
 
+	
 #Codes for code breaker go to this function
 def code_breaker():
 	print("test code_break")
 	return;
 
-#Check function make sure that input is a number and is less than 6
-#Return a boolean value
-def length_checking(length):
-	length_check = True
-	if length.isdigit() == True and int(length) <= 4:
-		length_check = True
-	else:
-		length_check = False
-	return length_check
-
+#Function that returns number of guesses for each game mode
+def game_mode_guess(game_mode):
+	guesses = 12
+	if int(game_mode) == 1:
+		guesses = 12
+	if int(game_mode) == 2:
+		guesses = 7
+	if int(game_mode) == 3:
+		guesses = 3
+	return guesses
+	
 #Check function make sure that input is a number and is less than 12
 #Return a boolean value
-def number_checking(number_guess):
-	number_check = True;
-	if number_guess.isdigit() == True and int(number_guess) <= 12:
-		number_check = True
+def game_mode_checking(game_mode):
+	game_mode_check = True;
+	if game_mode.isdigit() == True and int(game_mode) > 0 and int(game_mode) < 4:
+		game_mode_check = True
 	else:
-		number_check = False
-	return number_check
+		game_mode_check = False
+	return game_mode_check
 	
 #Check user input to make sure if its a string, correct length and not out of bound from a - file
 #Return a boolean value
-def user_color_checking(user_color, length):
+def user_color_checking(user_color):
 	user_color_check = True
-	if user_color.isdigit() == False and len(user_color) == int(length):
+	if user_color.isdigit() == False and len(user_color) == 4:
 		user_color_check = True
 		if any( [i<'a' or i>'f' for i in user_color]):
 			user_color_check = False
@@ -51,7 +53,7 @@ def user_color_checking(user_color, length):
 #Return a boolean value
 def user_feedback_cheking(user_feedback):
 	user_feedback_check = True
-	if user_feedback.isdigit() == True and len(user_feedback) == 1 and any( [int(i)==0 or int(i)==1 for i in user_feedback]):
+	if user_feedback.isdigit() == True and len(user_feedback) > 4 and any( [int(i)==0 or int(i)==1 for i in user_feedback]):
 		user_feedback_check = True
 	else:
 		user_feedback_check = False
@@ -60,24 +62,19 @@ def user_feedback_cheking(user_feedback):
 	
 #Codes for code maker go to this function
 def code_maker():
-	length = input("Please choose number of color from 1 - 4: ")
-	length_check = length_checking(length)
+	game_mode = input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n")
+	game_mode_check = game_mode_checking(game_mode)
+	while game_mode_check == False:
+		game_mode = input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n")
+		game_mode_check = game_mode_checking(game_mode)
 	
-	while length_check == False:
-		length = input("Please choose number of color from 1 - 4: ")
-		length_check = length_checking(length)
-	
-	number_guess = input("Please choose number of guesses 1 - 12: ")
-	number_check = number_checking(number_guess)
-	while number_check == False:
-		number_guess = input("Please choose number of guesses 1 - 12: ")
-		number_check = number_checking(number_guess)
-	
+	guesses = game_mode_guess(game_mode)
+	print(guesses)
 	user_color = input("Please choose color from a-f: ")
-	user_color_check = user_color_checking(user_color, length)
+	user_color_check = user_color_checking(user_color)
 	while user_color_check == False:
 		user_color = input("Please choose color from a-f: ")
-		user_color_check = user_color_checking(user_color, length)
+		user_color_check = user_color_checking(user_color)
 	
 	user_feedback = input("Pleas provide feedback either 1 or 0: ")
 	user_feedback_check = user_feedback_cheking(user_feedback)
