@@ -1,5 +1,8 @@
 import re
+colors = set('roygbp')
+feedbacks = set('10')
 
+#Function that would print instruction for the player
 def instruction():
 	print("blah blah blah")
 	go_back_button = str(input("Press 1 to go back to the menu\n"))
@@ -18,11 +21,11 @@ def code_breaker():
 
 #Function that returns number of guesses for each game mode
 def game_mode_guess(game_mode):
-	guesses = 12
+	guesses = 7
 	if int(game_mode) == 1:
-		guesses = 12
-	if int(game_mode) == 2:
 		guesses = 7
+	if int(game_mode) == 2:
+		guesses = 5
 	if int(game_mode) == 3:
 		guesses = 3
 	return guesses
@@ -43,7 +46,7 @@ def user_color_checking(user_color):
 	user_color_check = True
 	if user_color.isdigit() == False and len(user_color) == 4:
 		user_color_check = True
-		if any( [i<'a' or i>'f' for i in user_color]):
+		if any((i not in colors) for i in user_color):
 			user_color_check = False
 	else:
 		user_color_check = False
@@ -54,8 +57,10 @@ def user_color_checking(user_color):
 #Return a boolean value
 def user_feedback_cheking(user_feedback):
 	user_feedback_check = True
-	if user_feedback.isdigit() == True and len(user_feedback) > 4 and any( [int(i)==0 or int(i)==1 for i in user_feedback]):
+	if user_feedback.isdigit() == True and len(user_feedback) <= 4:
 		user_feedback_check = True
+		if any((i not in feedbacks) for i in user_feedback):
+			user_feedback_check = False
 	else:
 		user_feedback_check = False
 	
@@ -71,10 +76,10 @@ def code_maker():
 	
 	guesses = game_mode_guess(game_mode)
 	print(guesses)
-	user_color = input("Please choose color from a-f: ")
+	user_color = input("Please choose your colors: ")
 	user_color_check = user_color_checking(user_color)
 	while user_color_check == False:
-		user_color = input("Please choose color from a-f: ")
+		user_color = input("Please choose your colors: ")
 		user_color_check = user_color_checking(user_color)
 	
 	user_feedback = input("Pleas provide feedback either 1 or 0: ")
