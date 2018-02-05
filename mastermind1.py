@@ -18,7 +18,34 @@ def code_breaker():
 	print("test code_break")
 	return;
 
-
+#Function for score, 4 variables will be passed in, variable guess_count is number of guess user or computer use
+#variable guesses is the total guesses for each game mode
+#variable mode is either 1 or 2, 1 for code_maker and 2 for code_breaker
+#variable cheat_bool to check if player cheat or not, only for code_maker
+def score(guess_count, guesses, mode, cheat_bool):
+	if mode == 1:
+		if(guess_count > 1 and guess_count <= guesses):
+			print("The Computer won!")
+			print("The Computer's score is:", guess_count,"guesses out of ",guesses,"total guesses!")
+		elif(guess_count == 1):
+			print("The Computer won")
+			print("The Computer's score is:", guess_count,"guesses out of ",guesses,"total guesses!")
+		else:
+			if(cheat_bool == False):
+				print("You won!")
+			else:
+				print("You won! But we know you cheated >:)\n")
+	if mode == 2:
+		if(guess_count > 1 and guess_count <= guesses):
+			print("You won!")
+			print("Your score is:", guess_count,"guesses out of ",guesses,"total guesses!")
+		elif(guess_count == 1):
+			print("You won!")
+			print("Your score is:", guess_count,"guess out of ",guesses,"total guesses!")
+		else:
+			print("You lost!")
+	return;	
+			
 #Function that returns number of guesses for each game mode
 def game_mode_guess(game_mode):
 	guesses = 7
@@ -90,16 +117,37 @@ def code_maker():
 		
 	print("test code_maker")
 	return;
+
+#This function is only for testing; therefore, I will not put any input check into it :)
+def unit_test():
+	test_mode = int(input("Press 1 to test score\n"))
 	
+	while test_mode != 1:
+		test_mode = str(input("Press 1 to test score\nPress 2 to test game_mode\n"))
+	if test_mode == 1:
+		guesses = int(input("Total guesses: "))
+		guess_count = int(input("Guess count: "))
+		mode = int(input("Mode: "))
+		cheat_input = int(input("Cheat (1 = True, 0 = False: "))
+		cheat_bool = False
+		if cheat_input == 1:
+			cheat_bool = True
+		else:
+			cheat_bool = False
+		score(guess_count, guesses, mode, cheat_bool)
+	
+	return;	
 def main():
 	print("Welcome to Mastermind!")
-	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\n" ))
+	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\nPress 4 for unit test\n" ))
 
 	#Loop until user give the right input
 	while mode != "1":
 		if mode == "2":
 			break
 		if mode == "3":
+			break
+		if mode == "4":
 			break
 		mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
 	
@@ -110,5 +158,7 @@ def main():
 		code_breaker()
 	elif mode == "3":
 		instruction()
+	elif mode == "4":
+		unit_test()
 		
 main()
