@@ -95,24 +95,24 @@ def user_feedback_cheking(user_feedback):
 	
 #Codes for code maker go to this function
 def code_maker():
-	game_mode = input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n")
+	game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
 	game_mode_check = game_mode_checking(game_mode)
 	while game_mode_check == False:
-		game_mode = input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n")
+		game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
 		game_mode_check = game_mode_checking(game_mode)
 	
 	guesses = game_mode_guess(game_mode)
 	print(guesses)
-	user_color = input("Please choose your colors: ")
+	user_color = str(input("Please choose your colors: "))
 	user_color_check = user_color_checking(user_color)
 	while user_color_check == False:
-		user_color = input("Please choose your colors: ")
+		user_color = str(input("Please choose your colors: "))
 		user_color_check = user_color_checking(user_color)
 	
-	user_feedback = input("Pleas provide feedback either 1 or 0: ")
+	user_feedback = str(input("Please provide feedback either 1 or 0: "))
 	user_feedback_check = user_feedback_cheking(user_feedback)
 	while user_feedback_check == False:
-		user_feedback = input("Pleas provide feedback either 1 or 0: ")
+		user_feedback = str(input("Please provide feedback either 1 or 0: "))
 		user_feedback_check = user_feedback_cheking(user_feedback)
 		
 	print("test code_maker")
