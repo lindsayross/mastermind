@@ -205,7 +205,7 @@ def code_maker():
 	cheated = False
 
 	for attempt in range(number_of_guesses):
-		if current_guess in possible_solutions:
+		if possible_solutions != []:
 			print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
 			unguessed_options.remove(current_guess)
 		else:
@@ -229,7 +229,7 @@ def code_maker():
 
 		user_keys = [int(user_feedback_black), int(user_feedback_white)]
 		keys = check_guess(current_guess, user_code)#to be replaced with or compared to user feedback
-                                                        #--currently compared to check for cheating
+							#--currently compared to check for cheating
 		print("User response:", user_keys) #first element is black pegs, second is white
 		print("Actual response:", keys)
 
@@ -238,17 +238,20 @@ def code_maker():
 
 		if user_keys[0] == code_length:
 			solved = True
-			print("\nComputer won with", attempt + 1, "guesses!")
-			break 
+			break
 
 		possible_solutions = remove_solutions(possible_solutions, user_keys, current_guess)
+		print(possible_solutions)
 		current_guess = find_next_guess(unguessed_options, possible_solutions, code_length)
-
-	if solved == False:
+		print(current_guess)
+	if solved == True:
+		print("\nComputer won with", attempt + 1, "guesses!")
 		if cheated == True:
-			print("\nYou won! The computer could not solve your code in", attempt +1, "guesses. \n(But we know you cheated!!)")
-		else:
-			print("\nYou won! The computer could not solve your code in", attempt +1, "guesses.")
+			print("(But we know you cheated!!)")
+	if solved == False:
+		print("\nYou won! The computer could not solve your code in", attempt +1, "guesses.")
+		if cheated == True:
+			print("(But we know you cheated!!)")
 
 	print("test code_maker")
 	return;
