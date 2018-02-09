@@ -205,12 +205,15 @@ def code_maker():
 	cheated = False
 
 	for attempt in range(number_of_guesses):
-		print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
-		try:
+		if current_guess in possible_solutions:
+			print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
 			unguessed_options.remove(current_guess)
-		except ValueError:
-			print("\nThere has been an error. Please try again.")
-			break
+		else:
+			possible_solutions = initialize_possible_solution_list(string_of_codes, code_length)
+			unguessed_options = list(possible_solutions)
+			current_guess = initial_guess
+			print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
+			unguessed_options.remove(current_guess)
 
 		user_feedback_black = str(input("How many black keys does this guess get?"))
 		user_feedback_black_check = user_feedback_checking(user_feedback_black, code_length)
