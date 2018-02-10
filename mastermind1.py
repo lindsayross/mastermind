@@ -181,7 +181,7 @@ def find_next_guess(unguessed_options, possible_solutions, code_length):
 
 #Codes for code maker go to this function
 def code_maker():
-	game_mode = str(input("\nPlease choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+	game_mode = str(input("\nPlease choose a game mode:\nPress 1 for hard\nPress 2 for medium\nPress 3 for easy\n"))
 	game_mode_check = game_mode_checking(game_mode)
 	while game_mode_check == False:
 		game_mode = str(input("Try again. Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
@@ -223,10 +223,15 @@ def code_maker():
 
 		user_feedback_white = str(input("How many white keys does this guess get?"))
 		user_feedback_white_check = user_feedback_checking(user_feedback_white, code_length)
-		while user_feedback_white_check == False:
+		user_feedback_total = int(user_feedback_black) + int(user_feedback_white)
+		user_feedback_total_check = user_feedback_checking(str(user_feedback_total), code_length)
+
+		while user_feedback_white_check == False or user_feedback_total_check == False :
 			user_feedback_white = str(input("Try again. How many white keys does this guess get?"))
 			user_feedback_white_check = user_feedback_checking(user_feedback_white, code_length)
-
+			user_feedback_total = int(user_feedback_black) + int(user_feedback_white)
+			user_feedback_total_check = user_feedback_checking(str(user_feedback_total), code_length)
+			
 		user_keys = [int(user_feedback_black), int(user_feedback_white)]
 		keys = check_guess(current_guess, user_code)#to be replaced with or compared to user feedback
 							#--currently compared to check for cheating
