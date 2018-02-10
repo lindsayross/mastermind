@@ -246,9 +246,8 @@ def code_maker():
 			break
 
 		possible_solutions = remove_solutions(possible_solutions, user_keys, current_guess)
-		print(possible_solutions)
 		current_guess = find_next_guess(unguessed_options, possible_solutions, code_length)
-		print(current_guess)
+		
 	if solved == True:
 		print("\nComputer won with", attempt + 1, "guesses!")
 		if cheated == True:
