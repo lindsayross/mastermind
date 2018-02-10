@@ -80,41 +80,179 @@ def user_color_checking(user_color):
 	
 	return user_color_check
 
-#Check user feedback to make sure that its a number either 1 or 0 and its not any other char
+#Check user feedback to make sure that its a number and it is less than the code length.
 #Return a boolean value
-def user_feedback_cheking(user_feedback):
+def user_feedback_checking(user_feedback, code_length):
 	user_feedback_check = True
-	if user_feedback.isdigit() == True and len(user_feedback) <= 4:
+	if user_feedback.isdigit() == True and int(user_feedback) <= code_length:
 		user_feedback_check = True
-		if any((i not in feedbacks) for i in user_feedback):
-			user_feedback_check = False
 	else:
 		user_feedback_check = False
 	
 	return user_feedback_check
-	
+
+#This method takes a code and a guess as string arguments and determines the
+#key pegs (black for correct color in correct position, white for correct color
+#in incorrect position) that should be returned to the user as feeback for
+#their guess in the code-breaker mode. Also used in the algorithm that chooses
+#the next guess in the code-maker mode. Returns tuple of black and white pegs.
+def check_guess(guess, code):
+        black = 0 #number of correct colors in correct positions
+        white = 0 #number of correct colors in wrong positions
+        guess_remain = [] #list of guess pegs that did not earn a black key-to check for white
+        code_remain = [] #list of code pegs that were not guessed in the correct position
+
+        for g, c in zip(guess, code):
+                if g == c:
+                        black += 1 #item in guess is in same position as in code
+                else:
+                        guess_remain.append(g)
+                        code_remain.append(c)
+        for g in guess_remain:
+                try:
+                        code_remain.remove(g) #if there is a match, remove the item from the
+                                   #code_remain list so it cannot be matched again in error
+                        white += 1 #item in guess is the correct color, but in the wrong position
+                except ValueError:
+                        True
+        return [black, white]
+
+#Creates list of possible solutions used to choose the computer's next guess
+#in the code-maker mode. Takes the string of the set of codes and the code length
+#as arguments and returns a list of possible solutions.
+def initialize_possible_solution_list(set_of_codes, code_length):
+        number_of_codes = len(set_of_codes)
+        index = [0]*code_length
+        possible_solutions = []
+        number_possible_solutions = number_of_codes**code_length
+        for i in range(number_possible_solutions):
+                solution = ""
+                for j in range(code_length):
+                        solution = set_of_codes[index[j]] + solution #build each possible solution peg by peg 
+                possible_solutions.append(solution) #add possible solution to list of possible solutions
+                for k in range(code_length):
+                        index[k] += 1 #increment index of code
+                        if index[k] == number_of_codes:
+                                index[k] = 0 #roll over code index
+                        else:
+                                break
+        return possible_solutions
+
+#Removes items from the computer's list of possible solutions for the code-maker mode.
+#Takes the list of possible solutions, the feedback keys provided by the user, and the
+#guess as arguments and returns the list of possible solutions (now reduced).
+def remove_solutions (possible_solutions, keys, guess):
+        bad_solutions = []
+        for solution in possible_solutions:
+                if check_guess(solution, guess) != keys:
+                        bad_solutions.append(solution) #Remove all possible solutions that would not give
+                                #the same score of colored and white pegs if they were the answer. 
+        for item in bad_solutions:
+                possible_solutions.remove(item)#remove bad_solutions from possible_solutions list
+        return possible_solutions
+
+#Finds the computer's next guess. Takes the list of unguessed options and the current list of
+#possible solutions as arguments and returns the next guess. For each unguessed option, it calculates
+#how many possible solutions would be eliminated for each possible colored/white peg score. The score
+#of a guess is the least of such values.
+def find_next_guess(unguessed_options, possible_solutions, code_length):
+        num_remain_in_possible_solutions = []
+        for option in unguessed_options: #For each unguessed option, calculate how many possibile solutions
+                                #would be eliminated for each possible key score
+                score_list = []
+                for i in range(code_length + 1):
+                        score_list.append([0]*(code_length + 1))
+                for solution in possible_solutions:
+                    keys = check_guess(solution, option)
+                    score_list[keys[0]][keys[1]] = score_list[keys[0]][keys[1]] + 1
+                num_remain_in_possible_solutions.append(max(sum(score_list, [])))
+        min_number = min(num_remain_in_possible_solutions)
+        min_found = False
+        next_guess = ""
+        for i in range(len(unguessed_options)):
+                if num_remain_in_possible_solutions[i] == min_number:
+                        if (unguessed_options[i] in possible_solutions):
+                                next_guess = unguessed_options[i]
+                                break
+                elif(not min_found):
+                        next_guess = unguessed_options[i]
+                        min_found = True               
+        return next_guess
+
 #Codes for code maker go to this function
 def code_maker():
-	game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+	game_mode = str(input("\nPlease choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
 	game_mode_check = game_mode_checking(game_mode)
 	while game_mode_check == False:
-		game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+		game_mode = str(input("Try again. Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
 		game_mode_check = game_mode_checking(game_mode)
 	
-	guesses = game_mode_guess(game_mode)
-	print(guesses)
-	user_color = str(input("Please choose your colors: "))
-	user_color_check = user_color_checking(user_color)
+	number_of_guesses = game_mode_guess(game_mode)
+	print("\nThe computer will get", number_of_guesses, "guesses.")
+	user_code = str(input("\nPlease choose your colors: "))
+	user_color_check = user_color_checking(user_code)
 	while user_color_check == False:
-		user_color = str(input("Please choose your colors: "))
-		user_color_check = user_color_checking(user_color)
-	
-	user_feedback = str(input("Please provide feedback either 1 or 0: "))
-	user_feedback_check = user_feedback_cheking(user_feedback)
-	while user_feedback_check == False:
-		user_feedback = str(input("Please provide feedback either 1 or 0: "))
-		user_feedback_check = user_feedback_cheking(user_feedback)
-		
+		user_code = str(input("Try again. Please choose your colors: "))
+		user_color_check = user_color_checking(user_code)
+
+	string_of_codes = "roygbp"
+	code_length = 4
+	possible_solutions = initialize_possible_solution_list(string_of_codes, code_length)
+	unguessed_options = list(possible_solutions)
+	initial_guess = "rroo"
+	current_guess = initial_guess
+	solved = False
+	cheated = False
+
+	for attempt in range(number_of_guesses):
+		if possible_solutions != []:
+			print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
+			unguessed_options.remove(current_guess)
+		else:
+			possible_solutions = initialize_possible_solution_list(string_of_codes, code_length)
+			unguessed_options = list(possible_solutions)
+			current_guess = initial_guess
+			print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
+			unguessed_options.remove(current_guess)
+
+		user_feedback_black = str(input("How many black keys does this guess get?"))
+		user_feedback_black_check = user_feedback_checking(user_feedback_black, code_length)
+		while user_feedback_black_check == False:
+			user_feedback_black = str(input("Try again. How many black keys does this guess get?"))
+			user_feedback_black_check = user_feedback_checking(user_feedback_black, code_length)
+
+		user_feedback_white = str(input("How many white keys does this guess get?"))
+		user_feedback_white_check = user_feedback_checking(user_feedback_white, code_length)
+		while user_feedback_white_check == False:
+			user_feedback_white = str(input("Try again. How many white keys does this guess get?"))
+			user_feedback_white_check = user_feedback_checking(user_feedback_white, code_length)
+
+		user_keys = [int(user_feedback_black), int(user_feedback_white)]
+		keys = check_guess(current_guess, user_code)#to be replaced with or compared to user feedback
+							#--currently compared to check for cheating
+		print("User response:", user_keys) #first element is black pegs, second is white
+		print("Actual response:", keys)
+
+		if user_keys != keys:
+			cheated = True
+
+		if user_keys[0] == code_length:
+			solved = True
+			break
+
+		possible_solutions = remove_solutions(possible_solutions, user_keys, current_guess)
+		print(possible_solutions)
+		current_guess = find_next_guess(unguessed_options, possible_solutions, code_length)
+		print(current_guess)
+	if solved == True:
+		print("\nComputer won with", attempt + 1, "guesses!")
+		if cheated == True:
+			print("(But we know you cheated!!)")
+	if solved == False:
+		print("\nYou won! The computer could not solve your code in", attempt +1, "guesses.")
+		if cheated == True:
+			print("(But we know you cheated!!)")
+
 	print("test code_maker")
 	return;
 
