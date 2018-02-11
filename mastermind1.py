@@ -1,4 +1,5 @@
 import re
+import random
 colors = set('roygbp')
 feedbacks = set('10')
 
@@ -15,8 +16,57 @@ def instruction():
 		
 #Codes for code breaker go to this function
 def code_breaker():
-	print("test code_break")
-	return;
+        # create dictionary of colors
+        color_dict = {}
+        color_dict[1] = 'r'
+        color_dict[2] = 'o'
+        color_dict[3] = 'y'
+        color_dict[4] = 'g'
+        color_dict[5] = 'b'
+        color_dict[6] = 'p'
+
+        # generate random string of colors
+        pegs = ''
+        for i in range(4):           
+            random_num = random.randint(1,6)
+            random_color = color_dict[random_num]
+            pegs += random_color
+
+        # user chooses a game mode which determines the number of guesses
+        game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+        game_mode_check = game_mode_checking(game_mode)
+        while game_mode_check == False:
+                game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+                game_mode_check = game_mode_checking(game_mode)
+        number_of_guesses = game_mode_guess(game_mode)
+        print("\nYou will have", number_of_guesses, "guesses.")
+
+        user_guess = input("Please make a guess of the colored pegs: ")
+        # check to make sure guesses are valid
+        user_color_check = user_color_checking(user_guess)
+        while user_color_check == False:
+                user_guess = str(input("Try again. Please choose your colors: "))
+                user_color_check = user_color_checking(user_guess)
+		
+        guess_count = 1 # counts user guesses 
+        black_pegs, white_pegs = check_guess(user_guess, pegs) # determines black and white pegs
+
+        # keep guessing while user still has more guesses and has not reached the solution
+        while guess_count < number_of_guesses and black_pegs != 4:
+                print(black_pegs, "black pegs, and", white_pegs, "white pegs")
+                user_guess = input("Please make another guess: ")
+                black_pegs, white_pegs = check_guess(user_guess, pegs)
+                # check to make sure guesses are valid
+                user_color_check = user_color_checking(user_guess)
+                while user_color_check == False:
+                        user_guess = str(input("Try again. Please choose your colors: "))
+                        user_color_check = user_color_checking(user_guess)
+                guess_count +=1
+        if guess_count == number_of_guesses:
+                print("You ran out of guesses, the Computer wins.")
+                print("The correct solution was", pegs)
+        elif black_pegs == 4:
+                print("You guessed the correct solution in", guess_count, "guesses! You win!")
 
 #Function for score, 4 variables will be passed in, variable guess_count is number of guess user or computer use
 #variable guesses is the total guesses for each game mode
@@ -44,7 +94,7 @@ def score(guess_count, guesses, mode, cheat_bool):
 			print("Your score is:", guess_count,"guess out of ",guesses,"total guesses!")
 		else:
 			print("You lost!")
-	return;	
+	return;
 			
 #Function that returns number of guesses for each game mode
 def game_mode_guess(game_mode):
@@ -93,7 +143,7 @@ def user_feedback_checking(user_feedback, code_length):
 
 #This method takes a code and a guess as string arguments and determines the
 #key pegs (black for correct color in correct position, white for correct color
-#in incorrect position) that should be returned to the user as feeback for
+#in incorrect position) that should be returned to the user as feedback for
 #their guess in the code-breaker mode. Also used in the algorithm that chooses
 #the next guess in the code-maker mode. Returns tuple of black and white pegs.
 def check_guess(guess, code):
