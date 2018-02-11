@@ -62,11 +62,11 @@ def code_breaker():
                         user_guess = str(input("Try again. Please choose your colors: "))
                         user_color_check = user_color_checking(user_guess)
                 guess_count +=1
-        if guess_count == number_of_guesses:
+        if black_pegs == 4:
+                print("You guessed the correct solution in", guess_count, "guesses! You win!")
+        elif guess_count == number_of_guesses:
                 print("You ran out of guesses, the Computer wins.")
                 print("The correct solution was", pegs)
-        elif black_pegs == 4:
-                print("You guessed the correct solution in", guess_count, "guesses! You win!")
 
 #Function for score, 4 variables will be passed in, variable guess_count is number of guess user or computer use
 #variable guesses is the total guesses for each game mode
