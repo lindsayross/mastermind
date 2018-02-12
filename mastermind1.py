@@ -16,57 +16,59 @@ def instruction():
 		
 #Codes for code breaker go to this function
 def code_breaker():
-        # create dictionary of colors
-        color_dict = {}
-        color_dict[1] = 'r'
-        color_dict[2] = 'o'
-        color_dict[3] = 'y'
-        color_dict[4] = 'g'
-        color_dict[5] = 'b'
-        color_dict[6] = 'p'
+	# create dictionary of colors
+	color_dict = {}
+	color_dict[1] = 'r'
+	color_dict[2] = 'o'
+	color_dict[3] = 'y'
+	color_dict[4] = 'g'
+	color_dict[5] = 'b'
+	color_dict[6] = 'p'
 
-        # generate random string of colors
-        pegs = ''
-        for i in range(4):           
-            random_num = random.randint(1,6)
-            random_color = color_dict[random_num]
-            pegs += random_color
+	# generate random string of colors
+	pegs = ''
+	for i in range(4):           
+	    random_num = random.randint(1,6)
+	    random_color = color_dict[random_num]
+	    pegs += random_color
 
-        # user chooses a game mode which determines the number of guesses
-        game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
-        game_mode_check = game_mode_checking(game_mode)
-        while game_mode_check == False:
-                game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
-                game_mode_check = game_mode_checking(game_mode)
-        number_of_guesses = game_mode_guess(game_mode)
-        print("\nYou will have", number_of_guesses, "guesses.")
+	# user chooses a game mode which determines the number of guesses
+	game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+	game_mode_check = game_mode_checking(game_mode)
+	while game_mode_check == False:
+		game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+		game_mode_check = game_mode_checking(game_mode)
+	number_of_guesses = game_mode_guess(game_mode)
+	print("\nYou will have", number_of_guesses, "guesses.")
+	print("\n------------------- \nPeg Colors \nr - red \no - orange \ny - yellow \ng - green \nb - blue \np - purple \n")
+	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place \n-------------------")
 
-        user_guess = input("Please make a guess of the colored pegs: ")
-        # check to make sure guesses are valid
-        user_color_check = user_color_checking(user_guess)
-        while user_color_check == False:
-                user_guess = str(input("Try again. Please choose your colors: "))
-                user_color_check = user_color_checking(user_guess)
+	user_guess = input("\nPlease make a guess of the colored pegs: ")
+	# check to make sure guesses are valid
+	user_color_check = user_color_checking(user_guess)
+	while user_color_check == False:
+		user_guess = str(input("Try again. Please choose your colors: "))
+		user_color_check = user_color_checking(user_guess)
 		
-        guess_count = 1 # counts user guesses 
-        black_pegs, white_pegs = check_guess(user_guess, pegs) # determines black and white pegs
+	guess_count = 1 # counts user guesses 
+	black_pegs, white_pegs = check_guess(user_guess, pegs) # determines black and white pegs
 
-        # keep guessing while user still has more guesses and has not reached the solution
-        while guess_count < number_of_guesses and black_pegs != 4:
-                print(black_pegs, "black pegs, and", white_pegs, "white pegs")
-                user_guess = input("Please make another guess: ")
-                black_pegs, white_pegs = check_guess(user_guess, pegs)
-                # check to make sure guesses are valid
-                user_color_check = user_color_checking(user_guess)
-                while user_color_check == False:
-                        user_guess = str(input("Try again. Please choose your colors: "))
-                        user_color_check = user_color_checking(user_guess)
-                guess_count +=1
-        if black_pegs == 4:
-                print("You guessed the correct solution in", guess_count, "guesses! You win!")
-        elif guess_count == number_of_guesses:
-                print("You ran out of guesses, the Computer wins.")
-                print("The correct solution was", pegs)
+	# keep guessing while user still has more guesses and has not reached the solution
+	while guess_count < number_of_guesses and black_pegs != 4:
+		print(black_pegs, "black pegs, and", white_pegs, "white pegs")
+		user_guess = input("Please make another guess: ")
+		black_pegs, white_pegs = check_guess(user_guess, pegs)
+		# check to make sure guesses are valid
+		user_color_check = user_color_checking(user_guess)
+		while user_color_check == False:
+			user_guess = str(input("Try again. Please choose your colors: "))
+			user_color_check = user_color_checking(user_guess)
+		guess_count +=1
+	if black_pegs == 4:
+		print("You guessed the correct solution in", guess_count, "guesses! You win!")
+	elif guess_count == number_of_guesses:
+		print("You ran out of guesses, the Computer wins.")
+		print("The correct solution was", pegs)
 
 #Function for score, 4 variables will be passed in, variable guess_count is number of guess user or computer use
 #variable guesses is the total guesses for each game mode
@@ -201,32 +203,37 @@ def remove_solutions (possible_solutions, keys, guess):
                 possible_solutions.remove(item)#remove bad_solutions from possible_solutions list
         return possible_solutions
 
-#Finds the computer's next guess. Takes the list of unguessed options and the current list of
+#Finds the computer's next guess using the Knuth algorithm, which guarantees that the algorithm will
+#solve the code in 5 guesses or less. Takes the list of unguessed options and the current list of
 #possible solutions as arguments and returns the next guess. For each unguessed option, it calculates
-#how many possible solutions would be eliminated for each possible colored/white peg score. The score
-#of a guess is the least of such values.
+#how many possible solutions would remain for each possible colored/white peg score and uses a minimax
+#algorithm to find the next guess that will reduce the possible_solutions list by the greatest number.
 def find_next_guess(unguessed_options, possible_solutions, code_length):
         num_remain_in_possible_solutions = []
         for option in unguessed_options: #For each unguessed option, calculate how many possibile solutions
-                                #would be eliminated for each possible key score
+                                #would remain for each possible key score
                 score_list = []
                 for i in range(code_length + 1):
                         score_list.append([0]*(code_length + 1))
                 for solution in possible_solutions:
                     keys = check_guess(solution, option)
                     score_list[keys[0]][keys[1]] = score_list[keys[0]][keys[1]] + 1
-                num_remain_in_possible_solutions.append(max(sum(score_list, [])))
-        min_number = min(num_remain_in_possible_solutions)
+                num_remain_in_possible_solutions.append(max(sum(score_list, []))) #Add the maximum key
+                                #score for each unguessed option to the list of how many would remain
+
+        min_number = min(num_remain_in_possible_solutions) #find the minimum number in the list
         min_found = False
         next_guess = ""
+
         for i in range(len(unguessed_options)):
-                if num_remain_in_possible_solutions[i] == min_number:
+                if num_remain_in_possible_solutions[i] == min_number: #if the one with the min number 
+                                #is in list of possible solutions, choose that one. Otherwise, choose any
                         if (unguessed_options[i] in possible_solutions):
                                 next_guess = unguessed_options[i]
                                 break
-                elif(not min_found):
-                        next_guess = unguessed_options[i]
-                        min_found = True               
+                        elif(not min_found):
+                                next_guess = unguessed_options[i]
+                                min_found = True               
         return next_guess
 
 #Codes for code maker go to this function
@@ -239,6 +246,9 @@ def code_maker():
 	
 	number_of_guesses = game_mode_guess(game_mode)
 	print("\nThe computer will get", number_of_guesses, "guesses.")
+	print("\n------------------- \nPeg Colors \nr - red \no - orange \ny - yellow \ng - green \nb - blue \np - purple \n")
+	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place \n-------------------")
+
 	user_code = str(input("\nPlease choose your colors: "))
 	user_color_check = user_color_checking(user_code)
 	while user_color_check == False:
@@ -283,10 +293,9 @@ def code_maker():
 			user_feedback_total_check = user_feedback_checking(str(user_feedback_total), code_length)
 			
 		user_keys = [int(user_feedback_black), int(user_feedback_white)]
-		keys = check_guess(current_guess, user_code)#to be replaced with or compared to user feedback
-							#--currently compared to check for cheating
-		print("User response:", user_keys) #first element is black pegs, second is white
-		print("Actual response:", keys)
+		keys = check_guess(current_guess, user_code)#compared to user feedback to check for wrong input
+		print("User feedback:", user_keys) #first element is black pegs, second is white
+		print("Correct feedback:", keys)
 
 		if user_keys != keys:
 			cheated = True
