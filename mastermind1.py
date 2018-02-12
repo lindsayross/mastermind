@@ -104,12 +104,12 @@ def guess_diff_guess(guess_diff, mode):
 	guesses = 7
 	if int(guess_diff) == 1:
 		if int(mode) == 1:
-			guesses = 7
+			guesses = 5
 		elif int(mode) == 2:
 			guesses = 10
 	if int(guess_diff) == 2:
 		if int(mode) == 1:
-			guesses = 5
+			guesses = 4
 		elif int(mode) == 2:
 			guesses = 7
 	if int(guess_diff) == 3:
