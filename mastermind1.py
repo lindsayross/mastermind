@@ -15,7 +15,8 @@ def instruction():
 		main()
 		
 #Codes for code breaker go to this function
-def code_breaker():
+def code_breaker(mode):
+
 	# create dictionary of colors
 	color_dict = {}
 	color_dict[1] = 'r'
@@ -33,12 +34,12 @@ def code_breaker():
 	    pegs += random_color
 
 	# user chooses a game mode which determines the number of guesses
-	game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
-	game_mode_check = game_mode_checking(game_mode)
-	while game_mode_check == False:
-		game_mode = str(input("Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
-		game_mode_check = game_mode_checking(game_mode)
-	number_of_guesses = game_mode_guess(game_mode)
+	guess_diff = str(input("\nPlease choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+	guess_diff_check = guess_diff_checking(guess_diff)
+	while guess_diff_check == False:
+		guess_diff = str(input("\nPlease choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+		guess_diff_check = guess_diff_checking(guess_diff)
+	number_of_guesses = guess_diff_guess(guess_diff, mode)
 	print("\nYou will have", number_of_guesses, "guesses.")
 	print("\n------------------- \nPeg Colors \nr - red \no - orange \ny - yellow \ng - green \nb - blue \np - purple \n")
 	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place \n-------------------")
@@ -56,7 +57,7 @@ def code_breaker():
 	# keep guessing while user still has more guesses and has not reached the solution
 	while guess_count < number_of_guesses and black_pegs != 4:
 		print(black_pegs, "black pegs, and", white_pegs, "white pegs")
-		user_guess = input("Please make another guess: ")
+		user_guess = input("\nPlease make another guess: ")
 		black_pegs, white_pegs = check_guess(user_guess, pegs)
 		# check to make sure guesses are valid
 		user_color_check = user_color_checking(user_guess)
@@ -99,25 +100,34 @@ def score(guess_count, guesses, mode, cheat_bool):
 	return;
 			
 #Function that returns number of guesses for each game mode
-def game_mode_guess(game_mode):
+def guess_diff_guess(guess_diff, mode):
 	guesses = 7
-	if int(game_mode) == 1:
-		guesses = 7
-	if int(game_mode) == 2:
-		guesses = 5
-	if int(game_mode) == 3:
-		guesses = 3
+	if int(guess_diff) == 1:
+		if int(mode) == 1:
+			guesses = 7
+		elif int(mode) == 2:
+			guesses = 10
+	if int(guess_diff) == 2:
+		if int(mode) == 1:
+			guesses = 5
+		elif int(mode) == 2:
+			guesses = 7
+	if int(guess_diff) == 3:
+		if int(mode) == 1:
+			guesses = 3
+		if int(mode) == 2:
+			guesses = 5
 	return guesses
 	
 #Check function make sure that input is a number and is less than 12
 #Return a boolean value
-def game_mode_checking(game_mode):
-	game_mode_check = True;
-	if game_mode.isdigit() == True and int(game_mode) > 0 and int(game_mode) < 4:
-		game_mode_check = True
+def guess_diff_checking(guess_diff):
+	guess_diff_check = True;
+	if guess_diff.isdigit() == True and int(guess_diff) > 0 and int(guess_diff) < 4:
+		guess_diff_check = True
 	else:
-		game_mode_check = False
-	return game_mode_check
+		guess_diff_check = False
+	return guess_diff_check
 	
 #Check user input to make sure if its a string, correct length and not out of bound from a - file
 #Return a boolean value
@@ -237,14 +247,14 @@ def find_next_guess(unguessed_options, possible_solutions, code_length):
         return next_guess
 
 #Codes for code maker go to this function
-def code_maker():
-	game_mode = str(input("\nPlease choose a game mode:\nPress 1 for hard\nPress 2 for medium\nPress 3 for easy\n"))
-	game_mode_check = game_mode_checking(game_mode)
-	while game_mode_check == False:
-		game_mode = str(input("Try again. Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
-		game_mode_check = game_mode_checking(game_mode)
+def code_maker(mode):
+	guess_diff = str(input("\nPlease choose a game mode:\nPress 1 for hard\nPress 2 for medium\nPress 3 for easy\n"))
+	guess_diff_check = guess_diff_checking(guess_diff)
+	while guess_diff_check == False:
+		guess_diff = str(input("Try again. Please choose a game mode:\nPress 1 for easy\nPress 2 for medium\nPress 3 for hard\n"))
+		guess_diff_check = guess_diff_checking(guess_diff)
 	
-	number_of_guesses = game_mode_guess(game_mode)
+	number_of_guesses = guess_diff_guess(guess_diff, mode)
 	print("\nThe computer will get", number_of_guesses, "guesses.")
 	print("\n------------------- \nPeg Colors \nr - red \no - orange \ny - yellow \ng - green \nb - blue \np - purple \n")
 	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place \n-------------------")
@@ -267,12 +277,14 @@ def code_maker():
 	for attempt in range(number_of_guesses):
 		if possible_solutions != []:
 			print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
+			print("You colors are: " + user_code)
 			unguessed_options.remove(current_guess)
 		else:
 			possible_solutions = initialize_possible_solution_list(string_of_codes, code_length)
 			unguessed_options = list(possible_solutions)
 			current_guess = initial_guess
 			print("\nComputer's guess " + str(attempt + 1) + ":", current_guess)
+			print("You colors are: " + user_code)
 			unguessed_options.remove(current_guess)
 
 		user_feedback_black = str(input("How many black keys does this guess get?"))
@@ -324,7 +336,7 @@ def unit_test():
 	test_mode = int(input("Press 1 to test score\n"))
 	
 	while test_mode != 1:
-		test_mode = str(input("Press 1 to test score\nPress 2 to test game_mode\n"))
+		test_mode = str(input("Press 1 to test score\nPress 2 to test guess_diff\n"))
 	if test_mode == 1:
 		guesses = int(input("Total guesses: "))
 		guess_count = int(input("Guess count: "))
@@ -354,9 +366,9 @@ def main():
 	
 	#Switch case for mode
 	if mode == "1":
-		code_maker()
+		code_maker(mode)
 	elif mode == "2":
-		code_breaker()
+		code_breaker(mode)
 	elif mode == "3":
 		instruction()
 	elif mode == "4":
