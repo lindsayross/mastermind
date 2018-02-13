@@ -3,6 +3,7 @@ import random
 colors = set('roygbp')
 feedbacks = set('10')
 
+#Authors: Anh Phan & Lindsay Ross
 #Function that would print instruction for the player
 def instruction():
 	print("blah blah blah")
@@ -13,7 +14,8 @@ def instruction():
 		go_back_button = str(input("Press 1 to go back to the menu\n"))
 	if go_back_button == "1":
 		main()
-		
+
+#Author: Lindsay Ross		
 #Codes for code breaker go to this function
 def code_breaker(mode):
 
@@ -71,6 +73,7 @@ def code_breaker(mode):
 		print("You ran out of guesses, the Computer wins.")
 		print("The correct solution was", pegs)
 
+#Author: Anh Phan
 #Function for score, 4 variables will be passed in, variable guess_count is number of guess user or computer use
 #variable guesses is the total guesses for each game mode
 #variable mode is either 1 or 2, 1 for code_maker and 2 for code_breaker
@@ -98,7 +101,8 @@ def score(guess_count, guesses, mode, cheat_bool):
 		else:
 			print("You lost!")
 	return;
-			
+
+#Author: Anh Phan	
 #Function that returns number of guesses for each game mode
 def guess_diff_guess(guess_diff, mode):
 	guesses = 7
@@ -118,7 +122,8 @@ def guess_diff_guess(guess_diff, mode):
 		if int(mode) == 2:
 			guesses = 5
 	return guesses
-	
+
+#Author: Anh Phan	
 #Check function make sure that input is a number and is less than 12
 #Return a boolean value
 def guess_diff_checking(guess_diff):
@@ -128,7 +133,8 @@ def guess_diff_checking(guess_diff):
 	else:
 		guess_diff_check = False
 	return guess_diff_check
-	
+
+#Author: Anh Phan	
 #Check user input to make sure if its a string, correct length and not out of bound from a - file
 #Return a boolean value
 def user_color_checking(user_color):
@@ -142,6 +148,7 @@ def user_color_checking(user_color):
 	
 	return user_color_check
 
+#Author: Anh Phan
 #Check user feedback to make sure that its a number and it is less than the code length.
 #Return a boolean value
 def user_feedback_checking(user_feedback, code_length):
@@ -153,6 +160,7 @@ def user_feedback_checking(user_feedback, code_length):
 	
 	return user_feedback_check
 
+#Author: Kristin Mills
 #This method takes a code and a guess as string arguments and determines the
 #key pegs (black for correct color in correct position, white for correct color
 #in incorrect position) that should be returned to the user as feedback for
@@ -179,6 +187,7 @@ def check_guess(guess, code):
                         True
         return [black, white]
 
+#Author: Kristin Mills
 #Creates list of possible solutions used to choose the computer's next guess
 #in the code-maker mode. Takes the string of the set of codes and the code length
 #as arguments and returns a list of possible solutions.
@@ -200,6 +209,7 @@ def initialize_possible_solution_list(set_of_codes, code_length):
                                 break
         return possible_solutions
 
+#Author: Kristin Mills
 #Removes items from the computer's list of possible solutions for the code-maker mode.
 #Takes the list of possible solutions, the feedback keys provided by the user, and the
 #guess as arguments and returns the list of possible solutions (now reduced).
@@ -213,6 +223,7 @@ def remove_solutions (possible_solutions, keys, guess):
                 possible_solutions.remove(item)#remove bad_solutions from possible_solutions list
         return possible_solutions
 
+#Author: Kristin Mills
 #Finds the computer's next guess using the Knuth algorithm, which guarantees that the algorithm will
 #solve the code in 5 guesses or less. Takes the list of unguessed options and the current list of
 #possible solutions as arguments and returns the next guess. For each unguessed option, it calculates
@@ -246,6 +257,7 @@ def find_next_guess(unguessed_options, possible_solutions, code_length):
                                 min_found = True               
         return next_guess
 
+#Authors: Anh Phan & Kristin Mills
 #Codes for code maker go to this function
 def code_maker(mode):
 	guess_diff = str(input("\nPlease choose a game mode:\nPress 1 for hard\nPress 2 for medium\nPress 3 for easy\n"))
@@ -350,6 +362,8 @@ def unit_test():
 		score(guess_count, guesses, mode, cheat_bool)
 	
 	return;	
+
+#Author: Anh Phan
 def main():
 	print("Welcome to Mastermind!")
 	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\nPress 4 for unit test\n" ))
