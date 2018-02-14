@@ -390,6 +390,48 @@ def code_maker(mode):
 
 	return;
 
+#Author: Kristin Mills
+#Runs all possible codes and prints statistics about the number of guesses needed by the
+#computer's Code-Maker algorithm to solve each code.
+def print_statistics():
+    string_of_codes = "roygbp"
+    code_length = 4
+    initial_guess = "rroo"
+    max_trys = 10 #if not solved in max_trys will not keep guessing, consider unsolved
+    solved = False
+    code_list = initialize_possible_solution_list(string_of_codes, code_length)
+    num_trys = []
+    number_of_codes = len(code_list)
+    
+    for i in range(number_of_codes):
+        code_test = code_list[i]
+        print(code_test) #prints each code as it is tested
+
+        possible_solutions = list(code_list)
+        unguessed_options = list(possible_solutions)
+        current_guess = initial_guess
+
+        for attempt in range(max_trys):
+            unguessed_options.remove(current_guess)
+            keys = check_guess(current_guess, code_test)
+            if (keys[0]==code_length):
+                solved = True
+                num_trys.append(attempt)
+                break
+            possible_solutions = remove_solutions(possible_solutions, keys, current_guess)
+            current_guess = find_next_guess(unguessed_options, possible_solutions, code_length)
+
+    total_guesses = sum(num_trys)+len(code_list)
+    guesses_per_code = float(sum(num_trys) + number_of_codes) / number_of_codes
+    print("Total guesses:", total_guesses)
+    print("Total codes:", number_of_codes)
+    print("Guesses per code:", guesses_per_code)
+    
+    histogram = [0]*max_trys
+    for num in num_trys:
+        histogram[num] += 1
+    print("Histogram of number of guesses:", histogram)
+
 #This function is only for testing; therefore, I will not put any input check into it :)
 def unit_test():
 	test_mode = int(input("Press 1 to test score\n"))
