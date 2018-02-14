@@ -29,6 +29,12 @@ def code_breaker(mode):
 	color_dict[5] = 'b'
 	color_dict[6] = 'p'
 
+	# boolean to check whether or not the user wants to continue 
+	done_mode = False
+
+        # counts number of hints user asks for
+	hint_count = 0
+	
 	# generate random string of colors
 	pegs = ''
 	for i in range(4):           
@@ -45,28 +51,52 @@ def code_breaker(mode):
 	number_of_guesses = guess_diff_guess(guess_diff, mode)
 	print("\nYou will have", number_of_guesses, "guesses.")
 	print("\n------------------- \nPeg Colors \nr - red \no - orange \ny - yellow \ng - green \nb - blue \np - purple \n")
-	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place \n-------------------")
-
+	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place ")
+	print("\n\n'quit' - enter at any time to quit")
+	print("'hint' - enter once per game for a hint; you will lose a guess")
+	print("'done' - enter at any time to give up and view solution \n-------------------")
 	user_guess = input("\nPlease make a guess of the colored pegs: ")
 	# check to make sure guesses are valid
 	user_color_check = user_color_checking(user_guess)
 	while user_color_check == False:
-		user_guess = str(input("Try again. Please choose your colors: "))
-		user_color_check = user_color_checking(user_guess)
-		
+		if user_guess == 'hint':
+			generate_hint(pegs)
+			user_color_check = True
+			hint_count += 1
+		elif user_guess == 'done':
+			print("Game Over")
+			print("The correct solution was", pegs)
+			done_mode = True
+			user_color_check = True
+		else:
+			user_guess = str(input("Try again. Please choose your colors: "))
+			user_color_check = user_color_checking(user_guess)
+	
 	guess_count = 1 # counts user guesses 
 	black_pegs, white_pegs = check_guess(user_guess, pegs) # determines black and white pegs
-
+	
 	# keep guessing while user still has more guesses and has not reached the solution
-	while guess_count < number_of_guesses and black_pegs != 4:
-		print(black_pegs, "black pegs, and", white_pegs, "white pegs")
+	while guess_count < number_of_guesses and black_pegs != 4 and done_mode == False :
+		if user_guess != 'hint':
+			print(black_pegs, "black pegs, and", white_pegs, "white pegs")
 		user_guess = input("\nPlease make another guess: ")
 		black_pegs, white_pegs = check_guess(user_guess, pegs)
 		# check to make sure guesses are valid
 		user_color_check = user_color_checking(user_guess)
 		while user_color_check == False:
-			user_guess = str(input("Try again. Please choose your colors: "))
-			user_color_check = user_color_checking(user_guess)
+			if user_guess == 'hint' and hint_count < 1:
+				generate_hint(pegs)
+				user_color_check = True
+				hint_count += 1
+			elif user_guess == 'done':
+				print("Game Over")
+				print("The correct solution was", pegs)
+				done_mode = True
+				user_color_check = True
+			else:
+				user_guess = str(input("Try again. Please choose your colors: "))
+				black_pegs, white_pegs = check_guess(user_guess, pegs)
+				user_color_check = user_color_checking(user_guess)
 		guess_count +=1
 	if black_pegs == 4:
 		print("You guessed the correct solution in", guess_count, "guesses! You win!")
@@ -74,6 +104,16 @@ def code_breaker(mode):
 		print("You ran out of guesses, the Computer wins.")
 		print("The correct solution was", pegs)
 
+#Author: Lindsay Ross
+# Function that takes in solution and indicates to the user the value of a random peg
+def generate_hint(pegs):
+        
+        # generate random function
+        random_peg = random.randint(0,3)
+        # indicate random peg 
+        print("The color at position", random_peg+1 ,"is", pegs[random_peg])
+
+        
 #Author: Anh Phan
 #Function for score, 4 variables will be passed in, variable guess_count is number of guess user or computer use
 #variable guesses is the total guesses for each game mode
@@ -276,8 +316,9 @@ def code_maker(mode):
 	number_of_guesses = guess_diff_guess(guess_diff, mode)
 	print("\nThe computer will get", number_of_guesses, "guesses.")
 	print("\n------------------- \nPeg Colors \nr - red \no - orange \ny - yellow \ng - green \nb - blue \np - purple \n")
-	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place \n-------------------")
-
+	print("\nFeedback Colors \nblack - you have a peg that is the right color in the right place \nwhite - you have a peg that is the right color, but in the wrong place ")
+	print("\n\n'quit' - enter at any time to quit\n-------------------")
+	
 	user_code = str(input("\nPlease choose your colors: "))
 	user_color_check = user_color_checking(user_code)
 	while user_color_check == False:
