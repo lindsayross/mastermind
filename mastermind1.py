@@ -90,7 +90,7 @@ def score(guess_count, guesses, mode, cheat_bool):
 			if(cheat_bool == False):
 				print("You won!")
 			else:
-				print("You won! But we know you cheated >:)\n")
+				print("You won! However, this may be a result of your incorrect feedback\n")
 	if mode == 2:
 		if(guess_count > 1 and guess_count <= guesses):
 			print("You won!")
@@ -334,13 +334,11 @@ def code_maker(mode):
 	if solved == True:
 		print("\nComputer won with", attempt + 1, "guesses!")
 		if cheated == True:
-			print("(But we know you cheated!!)")
+			print("However, this result was due to your incorrect feedback")
 	if solved == False:
 		print("\nYou won! The computer could not solve your code in", attempt +1, "guesses.")
 		if cheated == True:
-			print("(But we know you cheated!!)")
-
-	print("test code_maker")
+			print("However, this result was due to your incorrect feedback")
 	return;
 
 #This function is only for testing; therefore, I will not put any input check into it :)
