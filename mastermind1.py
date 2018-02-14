@@ -1,5 +1,6 @@
 import re
 import random
+import sys
 colors = set('roygbp')
 feedbacks = set('10')
 
@@ -124,21 +125,25 @@ def guess_diff_guess(guess_diff, mode):
 	return guesses
 
 #Author: Anh Phan	
-#Check function make sure that input is a number and is less than 12
+#Check function make sure that input is a number and is less than 4
 #Return a boolean value
 def guess_diff_checking(guess_diff):
 	guess_diff_check = True;
+	if guess_diff == 'quit' or guess_diff == 'Quit' or guess_diff == 'QUIT':
+		sys.exit()
 	if guess_diff.isdigit() == True and int(guess_diff) > 0 and int(guess_diff) < 4:
 		guess_diff_check = True
 	else:
 		guess_diff_check = False
 	return guess_diff_check
 
-#Author: Anh Phan	
+#Author: Anh Phan and Lindsay Ross
 #Check user input to make sure if its a string, correct length and not out of bound from a - file
 #Return a boolean value
 def user_color_checking(user_color):
 	user_color_check = True
+	if user_color == 'quit' or user_color == 'Quit' or user_color == 'QUIT':
+		sys.exit()
 	if user_color.isdigit() == False and len(user_color) == 4:
 		user_color_check = True
 		if any((i not in colors) for i in user_color):
@@ -148,11 +153,13 @@ def user_color_checking(user_color):
 	
 	return user_color_check
 
-#Author: Anh Phan
+#Author: Anh Phan and Lindsay Ross
 #Check user feedback to make sure that its a number and it is less than the code length.
 #Return a boolean value
 def user_feedback_checking(user_feedback, code_length):
 	user_feedback_check = True
+	if user_feedback == 'quit' or user_feedback == 'Quit' or user_feedback == 'QUIT':
+		sys.exit()
 	if user_feedback.isdigit() == True and int(user_feedback) <= code_length:
 		user_feedback_check = True
 	else:
@@ -167,61 +174,61 @@ def user_feedback_checking(user_feedback, code_length):
 #their guess in the code-breaker mode. Also used in the algorithm that chooses
 #the next guess in the code-maker mode. Returns tuple of black and white pegs.
 def check_guess(guess, code):
-        black = 0 #number of correct colors in correct positions
-        white = 0 #number of correct colors in wrong positions
-        guess_remain = [] #list of guess pegs that did not earn a black key-to check for white
-        code_remain = [] #list of code pegs that were not guessed in the correct position
+	black = 0 #number of correct colors in correct positions
+	white = 0 #number of correct colors in wrong positions
+	guess_remain = [] #list of guess pegs that did not earn a black key-to check for white
+	code_remain = [] #list of code pegs that were not guessed in the correct position
 
-        for g, c in zip(guess, code):
-                if g == c:
-                        black += 1 #item in guess is in same position as in code
-                else:
-                        guess_remain.append(g)
-                        code_remain.append(c)
-        for g in guess_remain:
-                try:
-                        code_remain.remove(g) #if there is a match, remove the item from the
-                                   #code_remain list so it cannot be matched again in error
-                        white += 1 #item in guess is the correct color, but in the wrong position
-                except ValueError:
-                        True
-        return [black, white]
+	for g, c in zip(guess, code):
+		if g == c:
+			black += 1 #item in guess is in same position as in code
+		else:
+			guess_remain.append(g)
+			code_remain.append(c)
+	for g in guess_remain:
+		try:
+			code_remain.remove(g) #if there is a match, remove the item from the
+				   #code_remain list so it cannot be matched again in error
+			white += 1 #item in guess is the correct color, but in the wrong position
+		except ValueError:
+			True
+	return [black, white]
 
 #Author: Kristin Mills
 #Creates list of possible solutions used to choose the computer's next guess
 #in the code-maker mode. Takes the string of the set of codes and the code length
 #as arguments and returns a list of possible solutions.
 def initialize_possible_solution_list(set_of_codes, code_length):
-        number_of_codes = len(set_of_codes)
-        index = [0]*code_length
-        possible_solutions = []
-        number_possible_solutions = number_of_codes**code_length
-        for i in range(number_possible_solutions):
-                solution = ""
-                for j in range(code_length):
-                        solution = set_of_codes[index[j]] + solution #build each possible solution peg by peg 
-                possible_solutions.append(solution) #add possible solution to list of possible solutions
-                for k in range(code_length):
-                        index[k] += 1 #increment index of code
-                        if index[k] == number_of_codes:
-                                index[k] = 0 #roll over code index
-                        else:
-                                break
-        return possible_solutions
+	number_of_codes = len(set_of_codes)
+	index = [0]*code_length
+	possible_solutions = []
+	number_possible_solutions = number_of_codes**code_length
+	for i in range(number_possible_solutions):
+		solution = ""
+		for j in range(code_length):
+			solution = set_of_codes[index[j]] + solution #build each possible solution peg by peg 
+		possible_solutions.append(solution) #add possible solution to list of possible solutions
+		for k in range(code_length):
+			index[k] += 1 #increment index of code
+			if index[k] == number_of_codes:
+				index[k] = 0 #roll over code index
+			else:
+				break
+	return possible_solutions
 
 #Author: Kristin Mills
 #Removes items from the computer's list of possible solutions for the code-maker mode.
 #Takes the list of possible solutions, the feedback keys provided by the user, and the
 #guess as arguments and returns the list of possible solutions (now reduced).
 def remove_solutions (possible_solutions, keys, guess):
-        bad_solutions = []
-        for solution in possible_solutions:
-                if check_guess(solution, guess) != keys:
-                        bad_solutions.append(solution) #Remove all possible solutions that would not give
-                                #the same score of colored and white pegs if they were the answer. 
-        for item in bad_solutions:
-                possible_solutions.remove(item)#remove bad_solutions from possible_solutions list
-        return possible_solutions
+	bad_solutions = []
+	for solution in possible_solutions:
+		if check_guess(solution, guess) != keys:
+			bad_solutions.append(solution) #Remove all possible solutions that would not give
+				#the same score of colored and white pegs if they were the answer. 
+	for item in bad_solutions:
+		possible_solutions.remove(item)#remove bad_solutions from possible_solutions list
+	return possible_solutions
 
 #Author: Kristin Mills
 #Finds the computer's next guess using the Knuth algorithm, which guarantees that the algorithm will
@@ -230,32 +237,32 @@ def remove_solutions (possible_solutions, keys, guess):
 #how many possible solutions would remain for each possible colored/white peg score and uses a minimax
 #algorithm to find the next guess that will reduce the possible_solutions list by the greatest number.
 def find_next_guess(unguessed_options, possible_solutions, code_length):
-        num_remain_in_possible_solutions = []
-        for option in unguessed_options: #For each unguessed option, calculate how many possibile solutions
-                                #would remain for each possible key score
-                score_list = []
-                for i in range(code_length + 1):
-                        score_list.append([0]*(code_length + 1))
-                for solution in possible_solutions:
-                    keys = check_guess(solution, option)
-                    score_list[keys[0]][keys[1]] = score_list[keys[0]][keys[1]] + 1
-                num_remain_in_possible_solutions.append(max(sum(score_list, []))) #Add the maximum key
-                                #score for each unguessed option to the list of how many would remain
+	num_remain_in_possible_solutions = []
+	for option in unguessed_options: #For each unguessed option, calculate how many possibile solutions
+				#would remain for each possible key score
+		score_list = []
+		for i in range(code_length + 1):
+			score_list.append([0]*(code_length + 1))
+		for solution in possible_solutions:
+		    keys = check_guess(solution, option)
+		    score_list[keys[0]][keys[1]] = score_list[keys[0]][keys[1]] + 1
+		num_remain_in_possible_solutions.append(max(sum(score_list, []))) #Add the maximum key
+				#score for each unguessed option to the list of how many would remain
 
-        min_number = min(num_remain_in_possible_solutions) #find the minimum number in the list
-        min_found = False
-        next_guess = ""
+	min_number = min(num_remain_in_possible_solutions) #find the minimum number in the list
+	min_found = False
+	next_guess = ""
 
-        for i in range(len(unguessed_options)):
-                if num_remain_in_possible_solutions[i] == min_number: #if the one with the min number 
-                                #is in list of possible solutions, choose that one. Otherwise, choose any
-                        if (unguessed_options[i] in possible_solutions):
-                                next_guess = unguessed_options[i]
-                                break
-                        elif(not min_found):
-                                next_guess = unguessed_options[i]
-                                min_found = True               
-        return next_guess
+	for i in range(len(unguessed_options)):
+		if num_remain_in_possible_solutions[i] == min_number: #if the one with the min number 
+				#is in list of possible solutions, choose that one. Otherwise, choose any
+			if (unguessed_options[i] in possible_solutions):
+				next_guess = unguessed_options[i]
+				break
+			elif(not min_found):
+				next_guess = unguessed_options[i]
+				min_found = True               
+	return next_guess
 
 #Authors: Anh Phan & Kristin Mills
 #Codes for code maker go to this function
@@ -339,6 +346,7 @@ def code_maker(mode):
 		print("\nYou won! The computer could not solve your code in", attempt +1, "guesses.")
 		if cheated == True:
 			print("However, this result was due to your incorrect feedback")
+
 	return;
 
 #This function is only for testing; therefore, I will not put any input check into it :)
