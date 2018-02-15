@@ -454,18 +454,21 @@ def print_statistics():
         histogram[num] += 1
     print("Histogram of number of guesses:", histogram)
 
-#Author: Anh Phan
+#Author: Anh Phan and Lindsay Ross
 def main():
 	print("Welcome to Mastermind!")
 	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\n" ))
-
+	if mode == "quit":
+		sys.exit()
 	#Loop until user give the right input
 	while mode != "1":
 		if mode == "2":
 			break
 		if mode == "3":
 			break
-		mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
+		if mode == "quit":
+			sys.exit()
+		mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 to view instructions\n" ))
 	
 	#Switch case for mode
 	if mode == "1":
@@ -474,5 +477,7 @@ def main():
 		code_breaker(mode)
 	elif mode == "3":
 		instruction()
+	elif mode == "quit":
+		sys.exit()
 		
 main()
