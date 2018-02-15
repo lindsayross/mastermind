@@ -454,7 +454,6 @@ def print_statistics():
         histogram[num] += 1
     print("Histogram of number of guesses:", histogram)
 
-
 #Author: Anh Phan
 def main():
 	print("Welcome to Mastermind!")
