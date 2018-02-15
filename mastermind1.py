@@ -432,38 +432,16 @@ def print_statistics():
         histogram[num] += 1
     print("Histogram of number of guesses:", histogram)
 
-#This function is only for testing; therefore, I will not put any input check into it :)
-def unit_test():
-	test_mode = int(input("Press 1 to test score\n"))
-	
-	while test_mode != 1:
-		test_mode = str(input("Press 1 to test score\nPress 2 to test guess_diff\n"))
-	if test_mode == 1:
-		guesses = int(input("Total guesses: "))
-		guess_count = int(input("Guess count: "))
-		mode = int(input("Mode: "))
-		cheat_input = int(input("Cheat (1 = True, 0 = False: "))
-		cheat_bool = False
-		if cheat_input == 1:
-			cheat_bool = True
-		else:
-			cheat_bool = False
-		score(guess_count, guesses, mode, cheat_bool)
-	
-	return;	
-
 #Author: Anh Phan
 def main():
 	print("Welcome to Mastermind!")
-	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\nPress 4 for unit test\n" ))
+	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\n" ))
 
 	#Loop until user give the right input
 	while mode != "1":
 		if mode == "2":
 			break
 		if mode == "3":
-			break
-		if mode == "4":
 			break
 		mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
 	
@@ -474,7 +452,5 @@ def main():
 		code_breaker(mode)
 	elif mode == "3":
 		instruction()
-	elif mode == "4":
-		unit_test()
 		
 main()
