@@ -7,11 +7,14 @@ feedbacks = set('10')
 #Authors: Anh Phan & Lindsay Ross
 #Function that would print instruction for the player
 def instruction():
-	print("blah blah blah")
+        # opens instructions file
+	instructions = open("Instructions.txt", 'r')
+	for line in instructions:
+		print(line.rstrip())
 	go_back_button = str(input("Press 1 to go back to the menu\n"))
-	
+	# checks for valid user input
 	while go_back_button != "1":
-		print("blah blah blah")
+		print("Please enter valid input")
 		go_back_button = str(input("Press 1 to go back to the menu\n"))
 	if go_back_button == "1":
 		main()
@@ -103,6 +106,16 @@ def code_breaker(mode):
 	elif guess_count == number_of_guesses:
 		print("You ran out of guesses, the Computer wins.")
 		print("The correct solution was", pegs)
+		
+        # asks user if they want to go back to main menu or quit
+        
+	menu = input("\nPress 1 to return to menu\nPress 2 to quit")
+	while not(menu == '1' or menu == '2'):
+		menu = input("\nPress 1 to return to menu\nPress 2 to quit\n")
+	if menu == '1':
+		main()
+	elif menu == '2':
+		sys.exit()
 
 #Author: Lindsay Ross
 # Function that takes in solution and indicates to the user the value of a random peg
@@ -388,6 +401,15 @@ def code_maker(mode):
 		if cheated == True:
 			print("However, this result was due to your incorrect feedback")
 
+        # asks user if they want to go back to main menu or quit
+        
+	menu = input("\nPress 1 to return to menu\nPress 2 to quit")
+	while not(menu == '1' or menu == '2'):
+		menu = input("\nPress 1 to return to menu\nPress 2 to quit\n")
+	if menu == '1':
+		main()
+	elif menu == '2':
+		sys.exit()
 	return;
 
 #Author: Kristin Mills

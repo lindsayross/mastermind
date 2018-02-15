@@ -1,0 +1,35 @@
+-------------------
+***Mastermind Instructions***
+
+
+You can play this game in two modes:
+
+1. Code-maker
+
+Choose 4 colors that the computer has to guess in a set number of guesses, depending on the level. You will indicate feedback to the computer in the form or black and white pegs. 
+
+2. Code-breaker
+	
+The computer will randomly generate 4 colors that you have to guess in a set number of guesses, depending on the level. You will receive feedback from the computer in the form of black and white pegs. 
+
+
+Legend
+
+Guessing Colors 
+r - red
+o - orange
+y - yellow
+g - green 
+b - blue 
+p - purple 
+	
+Feedback Colors
+black - you have a peg that is the right color in the right place
+white - you have a peg that is the right color, but in the wrong place 
+
+Levels 
+Easy - 7 guesses
+Medium - 5 guesses
+Hard - 3 guesses 
+
+-------------------
