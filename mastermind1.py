@@ -7,11 +7,14 @@ feedbacks = set('10')
 #Authors: Anh Phan & Lindsay Ross
 #Function that would print instruction for the player
 def instruction():
-	print("blah blah blah")
+        # opens instructions file
+	instructions = open("Instructions.txt", 'r')
+	for line in instructions:
+		print(line.rstrip())
 	go_back_button = str(input("Press 1 to go back to the menu\n"))
-	
+	# checks for valid user input
 	while go_back_button != "1":
-		print("blah blah blah")
+		print("Please enter valid input")
 		go_back_button = str(input("Press 1 to go back to the menu\n"))
 	if go_back_button == "1":
 		main()
@@ -103,6 +106,16 @@ def code_breaker(mode):
 	elif guess_count == number_of_guesses:
 		print("You ran out of guesses, the Computer wins.")
 		print("The correct solution was", pegs)
+		
+        # asks user if they want to go back to main menu or quit
+        
+	menu = input("\nPress 1 to return to menu\nPress 2 to quit")
+	while not(menu == '1' or menu == '2'):
+		menu = input("\nPress 1 to return to menu\nPress 2 to quit\n")
+	if menu == '1':
+		main()
+	elif menu == '2':
+		sys.exit()
 
 #Author: Lindsay Ross
 # Function that takes in solution and indicates to the user the value of a random peg
@@ -388,6 +401,15 @@ def code_maker(mode):
 		if cheated == True:
 			print("However, this result was due to your incorrect feedback")
 
+        # asks user if they want to go back to main menu or quit
+        
+	menu = input("\nPress 1 to return to menu\nPress 2 to quit")
+	while not(menu == '1' or menu == '2'):
+		menu = input("\nPress 1 to return to menu\nPress 2 to quit\n")
+	if menu == '1':
+		main()
+	elif menu == '2':
+		sys.exit()
 	return;
 
 #Author: Kristin Mills
@@ -432,38 +454,17 @@ def print_statistics():
         histogram[num] += 1
     print("Histogram of number of guesses:", histogram)
 
-#This function is only for testing; therefore, I will not put any input check into it :)
-def unit_test():
-	test_mode = int(input("Press 1 to test score\n"))
-	
-	while test_mode != 1:
-		test_mode = str(input("Press 1 to test score\nPress 2 to test guess_diff\n"))
-	if test_mode == 1:
-		guesses = int(input("Total guesses: "))
-		guess_count = int(input("Guess count: "))
-		mode = int(input("Mode: "))
-		cheat_input = int(input("Cheat (1 = True, 0 = False: "))
-		cheat_bool = False
-		if cheat_input == 1:
-			cheat_bool = True
-		else:
-			cheat_bool = False
-		score(guess_count, guesses, mode, cheat_bool)
-	
-	return;	
 
 #Author: Anh Phan
 def main():
 	print("Welcome to Mastermind!")
-	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\nPress 4 for unit test\n" ))
+	mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\nPress 3 for instruction\n" ))
 
 	#Loop until user give the right input
 	while mode != "1":
 		if mode == "2":
 			break
 		if mode == "3":
-			break
-		if mode == "4":
 			break
 		mode = str(input("Press 1 to play in code-maker mode \nPress 2 to play in code-breaker mode\n" ))
 	
@@ -474,7 +475,5 @@ def main():
 		code_breaker(mode)
 	elif mode == "3":
 		instruction()
-	elif mode == "4":
-		unit_test()
 		
 main()
