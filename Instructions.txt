@@ -27,9 +27,17 @@ Feedback Colors
 black - you have a peg that is the right color in the right place
 white - you have a peg that is the right color, but in the wrong place 
 
-Levels 
-Easy - 7 guesses
-Medium - 5 guesses
-Hard - 3 guesses 
+Levels
+
+Code-Breaker:  
+Easy - 10 guesses
+Medium - 7 guesses
+Hard - 5 guesses 
+
+Code-Maker:  
+Easy - 3 guesses
+Medium - 4 guesses
+Hard - 5 guesses 
+
 
 -------------------
