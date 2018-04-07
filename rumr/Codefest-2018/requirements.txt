@@ -1,0 +1,5 @@
+flask
+flask-cors
+cloudant
+numpy
+cf-deployment-tracker
